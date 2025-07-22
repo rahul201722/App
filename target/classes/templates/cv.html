@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rahul Ranjan - CV</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            min-height: 100vh;
+            overflow: visible;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #333;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #333;
+        }
+        .contact-info {
+            margin: 10px 0;
+            color: #666;
+        }
+        .contact-info a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section h2 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        .education-item, .experience-item, .project-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            border-radius: 5px;
+        }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        .item-title {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
+        }
+        .item-duration {
+            color: #666;
+            font-style: italic;
+            text-align: right;
+        }
+        .item-company {
+            color: #007bff;
+            font-weight: 500;
+        }
+        .item-location {
+            color: #666;
+        }
+        .responsibilities {
+            list-style-type: none;
+            padding: 0;
+        }
+        .responsibilities li {
+            padding: 3px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+        .responsibilities li:before {
+            content: "•";
+            color: #007bff;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 10px;
+            align-items: start;
+        }
+        .skill-category {
+            font-weight: bold;
+            color: #333;
+        }
+        .skill-list {
+            color: #666;
+        }
+        .publication {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+        }
+        .publication-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .publication-authors {
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .publication-journal {
+            font-style: italic;
+            color: #007bff;
+        }
+        .award {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+        }
+        .award-title {
+            font-weight: bold;
+            color: #333;
+        }
+        .award-year {
+            color: #666;
+            font-style: italic;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            .header h1 {
+                font-size: 2em;
+            }
+            .item-header {
+                flex-direction: column;
+            }
+            .item-duration {
+                text-align: left;
+            }
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Ensure all content is visible */
+        html {
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        body {
+            height: auto;
+            overflow-y: visible;
+        }
+        
+        .container {
+            height: auto;
+            overflow: visible;
+            page-break-inside: avoid;
+        }
+        
+        /* Print-friendly styles */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+                margin: 0;
+                padding: 20px;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 th:text="${cv.personalInfo.name}">Name</h1>
+            <div class="contact-info">
+                <a th:href="'mailto:' + ${cv.personalInfo.email}" th:text="${cv.personalInfo.email}">Email</a> 
+                | <span th:text="${cv.personalInfo.phone}">Phone</span>
+            </div>
+            <div class="contact-info">
+                <a th:href="${cv.personalInfo.linkedin}" target="_blank">LinkedIn Profile</a>
+            </div>
+        </div>
+
+        <!-- Research Interests -->
+        <div class="section">
+            <h2>Research Interests</h2>
+            <p th:text="${cv.researchInterests}">Research interests...</p>
+        </div>
+
+        <!-- Education -->
+        <div class="section">
+            <h2>Education</h2>
+            <div th:each="edu : ${cv.education}" class="education-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title" th:text="${edu.institution}">Institution</div>
+                        <div class="item-company" th:text="${edu.degree}">Degree</div>
+                        <div class="item-location" th:text="${edu.location}">Location</div>
+                        <div th:if="${edu.gpa}" class="item-location">
+                            GPA: <span th:text="${edu.gpa}">GPA</span>
+                        </div>
+                        <div th:if="${edu.coursework}" class="item-location">
+                            Relevant Coursework: <span th:text="${edu.coursework}">Coursework</span>
+                        </div>
+                    </div>
+                    <div class="item-duration" th:text="${edu.duration}">Duration</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Skills -->
+        <div class="section">
+            <h2>Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">Programming:</div>
+                <div class="skill-list" th:text="${cv.technicalSkills.programming}">Programming languages</div>
+                
+                <div class="skill-category">Frameworks:</div>
+                <div class="skill-list" th:text="${cv.technicalSkills.frameworks}">Frameworks</div>
+                
+                <div class="skill-category">Tools:</div>
+                <div class="skill-list" th:text="${cv.technicalSkills.tools}">Tools</div>
+                
+                <div class="skill-category">Domains:</div>
+                <div class="skill-list" th:text="${cv.technicalSkills.domains}">Domains</div>
+            </div>
+        </div>
+
+        <!-- Publications -->
+        <div class="section">
+            <h2>Publications</h2>
+            <div th:each="pub : ${cv.publications}" class="publication">
+                <div class="publication-authors" th:text="${pub.authors}">Authors</div>
+                <div class="publication-title" th:text="${pub.title}">Title</div>
+                <div class="publication-journal">
+                    <em th:text="${pub.journal}">Journal</em>, 
+                    <strong th:text="${pub.volume}">Volume</strong> (<span th:text="${pub.year}">Year</span>).
+                    <a th:if="${pub.url}" th:href="${pub.url}" target="_blank">Link</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Research Experience -->
+        <div class="section">
+            <h2>Research Experience</h2>
+            <div th:each="exp : ${cv.researchExperience}" class="experience-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title" th:text="${exp.title}">Title</div>
+                        <div th:if="${exp.company and exp.company != ''}" class="item-company" th:text="${exp.company}">Company</div>
+                        <div th:if="${exp.location and exp.location != ''}" class="item-location" th:text="${exp.location}">Location</div>
+                    </div>
+                    <div class="item-duration" th:text="${exp.duration}">Duration</div>
+                </div>
+                <ul class="responsibilities">
+                    <li th:each="resp : ${exp.responsibilities}" th:text="${resp}">Responsibility</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Technical Projects -->
+        <div class="section">
+            <h2>Technical Projects</h2>
+            <div th:each="proj : ${cv.technicalProjects}" class="project-item">
+                <div class="item-header">
+                    <div class="item-title" th:text="${proj.title}">Project Title</div>
+                    <div class="item-duration" th:text="${proj.year}">Year</div>
+                </div>
+                <ul class="responsibilities">
+                    <li th:each="desc : ${proj.description}" th:text="${desc}">Description</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Industry Experience -->
+        <div class="section">
+            <h2>Industry Experience</h2>
+            <div th:each="exp : ${cv.industryExperience}" class="experience-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title" th:text="${exp.title}">Title</div>
+                        <div class="item-company" th:text="${exp.company}">Company</div>
+                        <div class="item-location" th:text="${exp.location}">Location</div>
+                    </div>
+                    <div class="item-duration" th:text="${exp.duration}">Duration</div>
+                </div>
+                <ul class="responsibilities">
+                    <li th:each="resp : ${exp.responsibilities}" th:text="${resp}">Responsibility</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Awards -->
+        <div class="section">
+            <h2>Awards & Recognition</h2>
+            <div th:each="award : ${cv.awards}" class="award">
+                <div class="award-title" th:text="${award.title}">Award Title</div>
+                <div class="award-year" th:text="${award.year}">Year</div>
+                <div th:text="${award.description}">Description</div>
+            </div>
+        </div>
+
+        <!-- Public Profiles -->
+        <div class="section">
+            <h2>Public Profiles</h2>
+            <div th:each="profile : ${cv.publicProfiles}">
+                <strong>LinkedIn:</strong> <a th:href="${profile}" target="_blank" th:text="${profile}">Profile URL</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
